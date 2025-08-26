@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)        // ✅ Hilt plugin
+    alias(libs.plugins.kapt)
 }
 
 android {
@@ -18,6 +20,15 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // 👇 Add this
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
+    hilt {
+        enableAggregatingTask = false
+    }
+
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -25,11 +36,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
     buildFeatures {
         viewBinding = true
@@ -56,6 +67,11 @@ dependencies {
     ksp(libs.androidx.room.compiler)              // Use KSP for annotation processing
     // annotationProcessor(libs.androidx.room.compiler) // if Java-only
 
+    // --- Hilt ---
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler) // ⚠️ Hilt still requires KAPT, not KSP yet
+    kapt(libs.javapoet)
+
     // Optional
     implementation(libs.androidx.room.paging)     // Paging 3 support
     testImplementation(libs.androidx.room.testing)
@@ -63,4 +79,10 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    constraints {
+        implementation("com.squareup:javapoet:1.13.0") {
+            because("Avoid older transitive versions that lack ClassName.canonicalName()")
+        }
+    }
 }

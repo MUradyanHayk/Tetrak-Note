@@ -2,8 +2,9 @@ package com.codestream.tetrak.data.repository
 
 import com.codestream.tetrak.data.local.Note
 import com.codestream.tetrak.data.local.NotesDao
+import javax.inject.Inject
 
-class NoteRepositoryImpl(private val notesDao: NotesDao) : NoteRepository {
+class NoteRepositoryImpl @Inject constructor(private val notesDao: NotesDao) : NoteRepository {
     override fun addNote(note: Note) {
         notesDao.addNote(note)
     }
