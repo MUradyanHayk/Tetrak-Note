@@ -4,24 +4,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.codestream.tetrak.data.local.Note
 import com.codestream.tetrak.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.lang.ref.WeakReference
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), NoteItemDelegate {
 
     private var _binding: FragmentHomeBinding? = null
     private val viewModel: HomeViewModel by viewModels()
+    private var adapter: NotesAdapter? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -40,10 +42,14 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        adapter = NotesAdapter(WeakReference(this))
+        binding.rvNotes.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+
         lifecycleScope.launch(Dispatchers.IO) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModel.allNotes.collectLatest { note ->
-
+                viewModel.allNotes.collectLatest { notes ->
+                    adapter?.submitList(notes)
                 }
             }
         }
@@ -52,5 +58,9 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onClick(note: Note) {
+
     }
 }
