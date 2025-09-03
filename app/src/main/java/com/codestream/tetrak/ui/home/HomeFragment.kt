@@ -10,8 +10,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.codestream.tetrak.data.local.Note
+import com.codestream.tetrak.MainActivity
+import com.codestream.tetrak.R
 import com.codestream.tetrak.databinding.FragmentHomeBinding
+import com.codestream.tetrak.ui.details.DetailsFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -42,6 +44,9 @@ class HomeFragment : Fragment(), NoteItemDelegate {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.fab.setOnClickListener {
+            onClick(-1)
+        }
         adapter = NotesAdapter(WeakReference(this))
         binding.rvNotes.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
@@ -60,7 +65,12 @@ class HomeFragment : Fragment(), NoteItemDelegate {
         _binding = null
     }
 
-    override fun onClick(note: Note) {
-
+    override fun onClick(id: Int) {
+        val mainActivity = activity as MainActivity
+        val bundle = Bundle()
+        bundle.putInt(DetailsFragment.ARG_NOTE_ID, id)
+        lifecycleScope.launch(Dispatchers.Main) {
+            mainActivity.navController.navigate(R.id.detailsFragment, bundle)
+        }
     }
 }

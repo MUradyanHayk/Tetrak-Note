@@ -9,7 +9,7 @@ import com.codestream.tetrak.databinding.NoteItemBinding
 import java.lang.ref.WeakReference
 
 interface NoteItemDelegate {
-    fun onClick(note: Note)
+    fun onClick(id: Int)
 }
 
 class NotesAdapter(var delegate: WeakReference<NoteItemDelegate>? = null) :
@@ -21,7 +21,7 @@ class NotesAdapter(var delegate: WeakReference<NoteItemDelegate>? = null) :
             binding.titleTextView.text = note.title
             binding.bodyTextView.text = note.body
             binding.root.setOnClickListener {
-                delegate?.get()?.onClick(note)
+                delegate?.get()?.onClick(note.id)
             }
         }
     }
