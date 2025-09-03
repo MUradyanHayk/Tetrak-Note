@@ -35,7 +35,7 @@
             android:id="@+id/action_detailsFragment_to_nav_home"
             app:destination="@id/nav_home" />
         <argument
-            android:name="noteId"
+            android:name="note_id"
             app:argType="integer" />
     </fragment>
 </navigation>

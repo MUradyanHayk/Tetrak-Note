@@ -12,15 +12,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.codestream.tetrak.R
 import com.codestream.tetrak.data.local.Note
 import com.codestream.tetrak.databinding.FragmentDetailsBinding
 import com.codestream.tetrak.databinding.FragmentHomeBinding
 import com.codestream.tetrak.ui.home.HomeViewModel
 import com.codestream.tetrak.ui.home.NotesAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-
+@AndroidEntryPoint
 class DetailsFragment : Fragment() {
     companion object {
         const val ARG_NOTE_ID = "note_id"
@@ -71,6 +73,7 @@ class DetailsFragment : Fragment() {
                     )
                 )
             }
+            findNavController().navigate(R.id.nav_home)
         }
         binding.ivDelete.setOnClickListener {
             viewModel.deleteNote()

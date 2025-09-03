@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codestream.tetrak.MainActivity
 import com.codestream.tetrak.R
@@ -48,7 +49,10 @@ class HomeFragment : Fragment(), NoteItemDelegate {
             onClick(-1)
         }
         adapter = NotesAdapter(WeakReference(this))
-        binding.rvNotes.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        layoutManager.setReverseLayout(true)
+        binding.rvNotes.layoutManager = layoutManager
+        binding.rvNotes.adapter = adapter
 
 
         lifecycleScope.launch(Dispatchers.IO) {
@@ -70,7 +74,7 @@ class HomeFragment : Fragment(), NoteItemDelegate {
         val bundle = Bundle()
         bundle.putInt(DetailsFragment.ARG_NOTE_ID, id)
         lifecycleScope.launch(Dispatchers.Main) {
-            mainActivity.navController.navigate(R.id.detailsFragment, bundle)
+            findNavController().navigate(R.id.detailsFragment, bundle)
         }
     }
 }

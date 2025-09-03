@@ -2,6 +2,7 @@ package com.codestream.tetrak.ui.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.codestream.tetrak.data.local.Note
@@ -20,6 +21,7 @@ class NotesAdapter(var delegate: WeakReference<NoteItemDelegate>? = null) :
         fun bind(note: Note) {
             binding.titleTextView.text = note.title
             binding.bodyTextView.text = note.body
+            binding.root.setBackgroundColor(note.color)
             binding.root.setOnClickListener {
                 delegate?.get()?.onClick(note.id)
             }
@@ -32,5 +34,6 @@ class NotesAdapter(var delegate: WeakReference<NoteItemDelegate>? = null) :
     }
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
+        holder.bind(currentList[position])
     }
 }

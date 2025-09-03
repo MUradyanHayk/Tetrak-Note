@@ -1,11 +1,12 @@
 package com.codestream.tetrak.data.repository
 
 import com.codestream.tetrak.data.local.Note
+import kotlinx.coroutines.flow.Flow
 
 interface NoteRepository {
-    fun addNote(note: Note)
-    fun updateNote(note: Note)
-    fun deleteNote(note: Note)
-    fun getNote(id: Int): Note?
-    fun getAllNotes(): List<Note>
+    suspend fun addNote(note: Note)
+    suspend fun updateNote(note: Note)
+    suspend fun deleteNote(note: Note)
+    suspend fun getNote(id: Int): Note?
+    suspend fun getAllNotes(): Flow<List<Note>>
 }
