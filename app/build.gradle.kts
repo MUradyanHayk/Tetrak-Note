@@ -8,16 +8,26 @@ plugins {
 
 android {
     namespace = "com.codestream.tetrak"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.codestream.tetrak"
         minSdk = 24
+        //noinspection OldTargetApi
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        create("release") {
+            storeFile = file("release/tetrak-keystore.jks")
+            storePassword = "notesaver123"
+            keyAlias = "keyAlias"
+            keyPassword = "notesaver123"
+        }
     }
 
     ksp {
@@ -27,13 +37,13 @@ android {
         enableAggregatingTask = false
     }
 
-
     buildTypes {
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -47,7 +57,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -56,6 +65,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -75,13 +85,27 @@ dependencies {
     implementation(libs.androidx.room.paging)     // Paging 3 support
     testImplementation(libs.androidx.room.testing)
 
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-
     constraints {
         implementation("com.squareup:javapoet:1.13.0") {
             because("Avoid older transitive versions that lack ClassName.canonicalName()")
+        }
+    }
+}
+
+// ---- APK naming ----
+val appName = "Tetrak"
+
+androidComponents {
+    onVariants { variant ->
+        variant.outputs.forEach { output ->
+            val computedName = providers.provider {
+                val vName = output.versionName.orNull ?: "1.0"
+                val vCode = output.versionCode.orNull ?: 1
+                val buildType = variant.buildType
+                "$appName $vName ($vCode)_$buildType.apk"
+            }
+
+//            output.outputFileName.set(computedName)
         }
     }
 }

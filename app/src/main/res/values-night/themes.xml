@@ -1,16 +1,19 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.TetrakNote" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
+        <!-- Primary brand color (Top bar / headers) -->
+        <item name="colorPrimary">#212D3B</item> <!-- Dark bluish gray -->
+        <item name="colorPrimaryVariant">#17212B</item> <!-- Even darker variant -->
+        <item name="colorOnPrimary">#FFFFFF</item> <!-- White text on dark -->
+
+        <!-- Secondary brand color (Accents, buttons, FAB) -->
+        <item name="colorSecondary">#3390EC</item> <!-- Telegram Blue -->
+        <item name="colorSecondaryVariant">#2478CC</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+
+        <!-- Backgrounds -->
+        <item name="android:windowBackground">#0E1621</item> <!-- Main background -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
     </style>
+
 </resources>
